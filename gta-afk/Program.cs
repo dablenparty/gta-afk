@@ -10,6 +10,14 @@ namespace gta_afk
     {
         private static readonly Random RandomInstance = new();
         private static readonly InputSimulator InputSimulatorInstance = new();
+        private static readonly VirtualKeyCode[] MovementKeys =
+        {
+            VirtualKeyCode.VK_W, 
+            VirtualKeyCode.VK_A, 
+            VirtualKeyCode.VK_S, 
+            VirtualKeyCode.VK_D,
+            VirtualKeyCode.SPACE
+        };
         
         /// <summary>
         /// Holds a key for a specified amount of time
