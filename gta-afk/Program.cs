@@ -56,15 +56,7 @@ namespace gta_afk
                     var holdMultiple = RandomInstance.Next(0, 2) == 1;
                     if (holdMultiple)
                     {
-                        var keyCodes = new VirtualKeyCode[2];
-                        for (var i = 0; i < keyCodes.Length; i++)
-                        {
-                            var key = GetRandomMovementKey();
-                            // don't use the same key twice
-                            while (keyCodes.Contains(key)) key = GetRandomMovementKey();
-
-                            keyCodes[i] = key;
-                        }
+                        VirtualKeyCode[] keyCodes = GenerateMultipleRandomKeys(2);
                         HoldKey(keyCodes, delay);
                     }
                     else
@@ -78,6 +70,21 @@ namespace gta_afk
                 Thread.Sleep(1000); // wait 1 second before looking again
                 if (Console.KeyAvailable && Console.ReadKey(true).Key == ConsoleKey.Escape) break;
             }
+        }
+
+        private static VirtualKeyCode[] GenerateMultipleRandomKeys(int count)
+        {
+            var keyCodes = new VirtualKeyCode[count];
+            for (var i = 0; i < keyCodes.Length; i++)
+            {
+                var key = GetRandomMovementKey();
+                // don't use the same key twice
+                while (keyCodes.Contains(key)) key = GetRandomMovementKey();
+
+                keyCodes[i] = key;
+            }
+
+            return keyCodes;
         }
 
         private static VirtualKeyCode GetRandomMovementKey()
