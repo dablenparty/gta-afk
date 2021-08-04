@@ -26,10 +26,7 @@ namespace gta_afk
         /// <param name="timeoutInMillis">Time (in milliseconds) to hold the key for</param>
         private static void HoldKey(VirtualKeyCode keyCode, int timeoutInMillis)
         {
-            Console.WriteLine($"Holding {keyCode} for {timeoutInMillis} milliseconds");
-            InputSimulatorInstance.Keyboard.KeyDown(keyCode);
-            InputSimulatorInstance.Keyboard.Sleep(timeoutInMillis);
-            InputSimulatorInstance.Keyboard.KeyUp(keyCode);
+            HoldKey(new []{keyCode}, timeoutInMillis);
         }
 
         /// <summary>
@@ -37,7 +34,7 @@ namespace gta_afk
         /// </summary>
         /// <param name="keyCodesEnumerable">Keys to hold</param>
         /// <param name="timeoutInMillis">Time (in milliseconds) to hold the keys for</param>
-        private static void HoldKeys(IEnumerable<VirtualKeyCode> keyCodesEnumerable, int timeoutInMillis)
+        private static void HoldKey(IEnumerable<VirtualKeyCode> keyCodesEnumerable, int timeoutInMillis)
         {
             var keyCodesArray = keyCodesEnumerable as VirtualKeyCode[] ?? keyCodesEnumerable.ToArray();
             Console.WriteLine($"Holding {string.Join(", ", keyCodesArray)} for {timeoutInMillis} milliseconds");
@@ -48,39 +45,34 @@ namespace gta_afk
         
         public static void Main(string[] args)
         {
-            VirtualKeyCode[] movementKeys =
-            {
-                VirtualKeyCode.VK_W, 
-                VirtualKeyCode.VK_A, 
-                VirtualKeyCode.VK_S, 
-                VirtualKeyCode.VK_D,
-                VirtualKeyCode.SPACE
-            };
             const string windowName = "Grand Theft Auto V";
             var handle = User32Dll.FindWindow(null, windowName);
             if (handle != IntPtr.Zero && User32Dll.SetForegroundWindow(handle))
             {
-                var delay = RandomInstance.Next(2, 9) * 500; // random delay between 1 and 4 seconds in half second intervals
-                var holdMultiple = RandomInstance.Next(0, 2) == 1;
-                if (holdMultiple)
+                while (User32Dll.GetForegroundWindow() == handle)
                 {
-                    var keyCodes = new VirtualKeyCode[2];
-                    for (var i = 0; i < keyCodes.Length; i++)
+                    var delay = RandomInstance.Next(2, 9) * 500; // random delay between 1 and 4 seconds in half second intervals
+                    var holdMultiple = RandomInstance.Next(0, 2) == 1;
+                    if (holdMultiple)
                     {
-                        var key = movementKeys[RandomInstance.Next(0, movementKeys.Length)];
-                        while (keyCodes.Contains(key))
+                        var keyCodes = new VirtualKeyCode[2];
+                        for (var i = 0; i < keyCodes.Length; i++)
                         {
-                            key = movementKeys[RandomInstance.Next(0, movementKeys.Length)]; // don't hold the same key twice
-                        }
+                            var key = MovementKeys[RandomInstance.Next(0, MovementKeys.Length)];
+                            while (keyCodes.Contains(key))
+                            {
+                                key = MovementKeys[RandomInstance.Next(0, MovementKeys.Length)]; // don't hold the same key twice
+                            }
                         
-                        keyCodes[i] = key;
+                            keyCodes[i] = key;
+                        }
+                        HoldKey(keyCodes, delay);
                     }
-                    HoldKeys(keyCodes, delay);
-                }
-                else
-                {
-                    var key = GetRandomMovementKey(movementKeys);
-                    HoldKey(key, delay);
+                    else
+                    {
+                        var key = GetRandomMovementKey(MovementKeys);
+                        HoldKey(key, delay);
+                    }
                 }
             }
             else
