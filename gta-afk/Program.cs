@@ -4,7 +4,7 @@ namespace gta_afk
 {
     class Program
     {
-        static void Main(string[] args)
+        public static void Main(string[] args)
         {
             const string windowClassName = "Notepad";
             var handle = User32Dll.FindWindow(windowClassName, null);
