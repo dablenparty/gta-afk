@@ -52,8 +52,8 @@ namespace gta_afk
             var handle = User32Dll.FindWindow(null, windowName);
             if (handle != IntPtr.Zero && User32Dll.SetForegroundWindow(handle))
             {
-                var delay = RandomInstance.Next(2, 8) * 500; // random delay between 1 and 4 seconds in half second intervals
-                var holdMultiple = RandomInstance.Next(0, 1) == 1;
+                var delay = RandomInstance.Next(2, 9) * 500; // random delay between 1 and 4 seconds in half second intervals
+                var holdMultiple = RandomInstance.Next(0, 2) == 1;
                 if (holdMultiple)
                 {
                     var keyCodes = new VirtualKeyCode[2];
