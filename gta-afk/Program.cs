@@ -58,11 +58,9 @@ namespace gta_afk
                         for (var i = 0; i < keyCodes.Length; i++)
                         {
                             var key = GetRandomMovementKey();
-                            while (keyCodes.Contains(key))
-                            {
-                                key = GetRandomMovementKey(); // don't hold the same key twice
-                            }
-                        
+                            // don't use the same key twice
+                            while (keyCodes.Contains(key)) key = GetRandomMovementKey();
+
                             keyCodes[i] = key;
                         }
                         HoldKey(keyCodes, delay);
