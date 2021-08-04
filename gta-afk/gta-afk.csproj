@@ -6,4 +6,8 @@
         <RootNamespace>gta_afk</RootNamespace>
     </PropertyGroup>
 
+    <ItemGroup>
+      <PackageReference Include="InputSimulator" Version="1.0.4" />
+    </ItemGroup>
+
 </Project>
