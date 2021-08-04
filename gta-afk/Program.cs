@@ -32,7 +32,7 @@ namespace gta_afk
         private static void HoldKeys(IEnumerable<VirtualKeyCode> keyCodesEnumerable, int timeoutInMillis)
         {
             var keyCodesArray = keyCodesEnumerable as VirtualKeyCode[] ?? keyCodesEnumerable.ToArray();
-            Console.WriteLine($"Holding {keyCodesArray} for {timeoutInMillis} milliseconds");
+            Console.WriteLine($"Holding {string.Join(", ", keyCodesArray)} for {timeoutInMillis} milliseconds");
             foreach (var keyCode in keyCodesArray) InputSimulatorInstance.Keyboard.KeyDown(keyCode);
             InputSimulatorInstance.Keyboard.Sleep(timeoutInMillis);
             foreach (var keyCode in keyCodesArray) InputSimulatorInstance.Keyboard.KeyUp(keyCode);
