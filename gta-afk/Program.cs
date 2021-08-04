@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using WindowsInput;
 using WindowsInput.Native;
 
@@ -73,6 +74,8 @@ namespace gta_afk
                     }
                 }
 
+                Console.WriteLine($"{windowName} is not focused. CLick into your game to continue or press Escape to exit");
+                Thread.Sleep(1000); // wait 1 second before looking again
                 if (Console.KeyAvailable && Console.ReadKey(true).Key == ConsoleKey.Escape) break;
             }
         }
