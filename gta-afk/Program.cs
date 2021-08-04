@@ -15,8 +15,7 @@ namespace gta_afk
             VirtualKeyCode.VK_W, 
             VirtualKeyCode.VK_A, 
             VirtualKeyCode.VK_S, 
-            VirtualKeyCode.VK_D,
-            VirtualKeyCode.SPACE
+            VirtualKeyCode.VK_D
         };
         
         /// <summary>
