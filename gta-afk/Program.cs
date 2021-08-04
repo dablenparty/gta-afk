@@ -58,10 +58,10 @@ namespace gta_afk
                         var keyCodes = new VirtualKeyCode[2];
                         for (var i = 0; i < keyCodes.Length; i++)
                         {
-                            var key = MovementKeys[RandomInstance.Next(0, MovementKeys.Length)];
+                            var key = GetRandomMovementKey();
                             while (keyCodes.Contains(key))
                             {
-                                key = MovementKeys[RandomInstance.Next(0, MovementKeys.Length)]; // don't hold the same key twice
+                                key = GetRandomMovementKey(); // don't hold the same key twice
                             }
                         
                             keyCodes[i] = key;
@@ -70,7 +70,7 @@ namespace gta_afk
                     }
                     else
                     {
-                        var key = GetRandomMovementKey(MovementKeys);
+                        var key = GetRandomMovementKey();
                         HoldKey(key, delay);
                     }
                 }
@@ -81,9 +81,9 @@ namespace gta_afk
             }
         }
 
-        private static VirtualKeyCode GetRandomMovementKey(IReadOnlyList<VirtualKeyCode> movementKeys)
+        private static VirtualKeyCode GetRandomMovementKey()
         {
-            return movementKeys[RandomInstance.Next(0, movementKeys.Count)];
+            return MovementKeys[RandomInstance.Next(0, MovementKeys.Length)];
         }
     }
 }
