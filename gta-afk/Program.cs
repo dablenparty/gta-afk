@@ -23,6 +23,7 @@ namespace gta_afk
         public static void Main(string[] args)
         {
             var inputSimulator = new InputSimulator();
+            var random = new Random();
             VirtualKeyCode[] movementKeys =
             {
                 VirtualKeyCode.VK_W, 
@@ -35,8 +36,10 @@ namespace gta_afk
             var handle = User32Dll.FindWindow(null, windowName);
             if (handle != IntPtr.Zero && User32Dll.SetForegroundWindow(handle))
             {
-                Console.WriteLine($"Set window with handle {handle} to foreground");
-                HoldKey(movementKeys[0], inputSimulator, 3000); // hold key for 3 seconds
+                var key = movementKeys[random.Next(0, movementKeys.Length)];
+                var delay = random.Next(2, 8) * 500; // random delay between 1 and 4 seconds in half second intervals
+                Console.WriteLine($"Pressing {key} for {delay} milliseconds");
+                HoldKey(key, inputSimulator, delay);
             }
             else
             {
