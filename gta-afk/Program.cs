@@ -46,7 +46,8 @@ namespace gta_afk
         {
             const string windowName = "Grand Theft Auto V";
             var handle = User32Dll.FindWindow(null, windowName);
-            if (handle != IntPtr.Zero && User32Dll.SetForegroundWindow(handle))
+            Console.WriteLine("Either close this window or click in and press Escape at any time to exit");
+            while (true)
             {
                 while (User32Dll.GetForegroundWindow() == handle)
                 {
@@ -71,10 +72,8 @@ namespace gta_afk
                         HoldKey(key, delay);
                     }
                 }
-            }
-            else
-            {
-                Console.WriteLine($"Window could not be set to foreground (handle: {handle})");
+
+                if (Console.KeyAvailable && Console.ReadKey(true).Key == ConsoleKey.Escape) break;
             }
         }
 
