@@ -57,6 +57,12 @@ namespace gta_afk
                     if (holdMultiple)
                     {
                         VirtualKeyCode[] keyCodes = GenerateMultipleRandomKeys(2);
+                        // disallows opposite keys to be pressed so that movement is always ensured
+                        while ((keyCodes.Contains(VirtualKeyCode.VK_W) && keyCodes.Contains(VirtualKeyCode.VK_S)) 
+                            || (keyCodes.Contains(VirtualKeyCode.VK_A) && keyCodes.Contains(VirtualKeyCode.VK_D)))
+                        {
+                            keyCodes = GenerateMultipleRandomKeys(2);
+                        }
                         HoldKey(keyCodes, delay);
                     }
                     else
@@ -66,8 +72,7 @@ namespace gta_afk
                     }
                 }
 
-                Console.WriteLine($"{windowName} is not focused. CLick into your game to continue or press Escape to exit");
-                Thread.Sleep(1000); // wait 1 second before looking again
+                Thread.Sleep(500); // wait a half-second before checking again
                 if (Console.KeyAvailable && Console.ReadKey(true).Key == ConsoleKey.Escape) break;
             }
         }
