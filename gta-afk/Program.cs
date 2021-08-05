@@ -7,7 +7,7 @@ using WindowsInput.Native;
 
 namespace gta_afk
 {
-    class Program
+    public static class Program
     {
         private static readonly Random RandomInstance = new();
         private static readonly InputSimulator InputSimulatorInstance = new();
