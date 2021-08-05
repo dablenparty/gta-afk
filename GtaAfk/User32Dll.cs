@@ -1,7 +1,7 @@
 using System;
 using System.Runtime.InteropServices;
 
-namespace gta_afk
+namespace GtaAfk
 {
     public static class User32Dll
     {

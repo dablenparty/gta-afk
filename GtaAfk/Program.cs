@@ -5,7 +5,7 @@ using System.Threading;
 using WindowsInput;
 using WindowsInput.Native;
 
-namespace gta_afk
+namespace GtaAfk
 {
     public static class Program
     {
