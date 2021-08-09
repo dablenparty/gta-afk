@@ -16,7 +16,8 @@ namespace GtaAfk
             VirtualKeyCode.VK_W, 
             VirtualKeyCode.VK_A, 
             VirtualKeyCode.VK_S, 
-            VirtualKeyCode.VK_D
+            VirtualKeyCode.VK_D,
+            VirtualKeyCode.LSHIFT
         };
         
         /// <summary>
@@ -56,7 +57,7 @@ namespace GtaAfk
                     var holdMultiple = RandomInstance.Next(0, 2) == 1;
                     if (holdMultiple)
                     {
-                        VirtualKeyCode[] keyCodes = GenerateMultipleRandomKeys(2);
+                        var keyCodes = GenerateMultipleRandomKeys(2);
                         // disallows opposite keys to be pressed so that movement is always ensured
                         while ((keyCodes.Contains(VirtualKeyCode.VK_W) && keyCodes.Contains(VirtualKeyCode.VK_S)) 
                             || (keyCodes.Contains(VirtualKeyCode.VK_A) && keyCodes.Contains(VirtualKeyCode.VK_D)))
