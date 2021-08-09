@@ -82,7 +82,7 @@ namespace GtaAfk
                     }
                 }
 
-                Console.Write("\rPress Esc to exit".PadRight(45));
+                Console.Write("\rPress Esc to exit...".PadRight(45));
                 if (Console.KeyAvailable && Console.ReadKey(true).Key == ConsoleKey.Escape) break;
             }
         }
