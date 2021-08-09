@@ -12,5 +12,10 @@ namespace GtaAfk
             KeyCode = keyCode;
             Hold = hold;
         }
+
+        public override string ToString()
+        {
+            return KeyCode.ToString();
+        }
     }
 }
