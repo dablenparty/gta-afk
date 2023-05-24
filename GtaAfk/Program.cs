@@ -51,12 +51,15 @@ public static class Program
         if (args.Length > 1) throw new ArgumentException("Too many args");
         var windowName = args.Length == 0 ? "Grand Theft Auto V" : args[0];
         var windowHandle = User32Dll.FindWindow(null, windowName);
-        Console.WriteLine("Either close this window or click in and press Ctrl+C or Escape to exit");
+        Console.WriteLine("Either close this window or click in and press Ctrl+C exit");
         while (true)
         {
             var foregroundWindow = User32Dll.GetForegroundWindow();
             if (foregroundWindow != windowHandle)
+            {
+                Console.Write($"\r'{windowName}' is not focused".PadRight(Console.WindowWidth));
                 continue;
+            }
             // random delay between 1 and 4 seconds in half second intervals
             var delay = RandomInstance.Next(2, 9) * 500;
             var keyCount = RandomInstance.Next(1, 3);
@@ -67,9 +70,6 @@ public static class Program
 
             HoldKey(keyCodes, delay);
 
-            Console.Write("\rPress Esc to exit...".PadRight(Console.WindowWidth));
-            if (Console.KeyAvailable && Console.ReadKey(true).Key == ConsoleKey.Escape)
-                break;
         }
     }
 
