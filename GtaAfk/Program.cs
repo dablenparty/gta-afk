@@ -20,16 +20,6 @@ public static class Program
     };
 
     /// <summary>
-    ///     Holds a key for a specified amount of time
-    /// </summary>
-    /// <param name="keyCode">Key to hold</param>
-    /// <param name="timeoutInMillis">Time (in milliseconds) to hold the key for</param>
-    private static void HoldKey(VirtualKeyCode keyCode, int timeoutInMillis)
-    {
-        HoldKey(new[] {keyCode}, timeoutInMillis);
-    }
-
-    /// <summary>
     ///     Holds multiple keys for a specified amount of time
     /// </summary>
     /// <param name="keyCodesEnumerable">Keys to hold</param>
@@ -73,6 +63,11 @@ public static class Program
         }
     }
 
+    /// <summary>
+    ///    Generates multiple random keys
+    /// </summary>
+    /// <param name="count">How many keys to generate</param>
+    /// <returns>An enumerable of key codes</returns>
     private static IEnumerable<VirtualKeyCode> GenerateMultipleRandomKeys(int count)
     {
         var keyCodes = new VirtualKeyCode[count];
@@ -113,6 +108,10 @@ public static class Program
         return keyCodes;
     }
 
+    /// <summary>
+    ///    Gets a random movement key
+    /// </summary>
+    /// <returns>Random movement key</returns>
     private static VirtualKeyCode GetRandomMovementKey()
     {
         return MovementKeys[RandomInstance.Next(0, MovementKeys.Length)];
