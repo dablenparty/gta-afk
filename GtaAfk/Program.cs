@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading;
 using WindowsInput;
 using WindowsInput.Native;
 
@@ -52,34 +51,34 @@ namespace GtaAfk
         {
             if (args.Length > 1) throw new ArgumentException($"Too many args");
             var windowName = args.Length == 0 ? "Grand Theft Auto V" : args[0];
-            IntPtr windowHandle = User32Dll.FindWindow(null, windowName);
+            var windowHandle = User32Dll.FindWindow(null, windowName);
             Console.WriteLine("Either close this window or click in and press Escape when it prompts you to exit");
             while (true)
             {
-                while (User32Dll.GetForegroundWindow() == windowHandle)
+                var foregroundWindow = User32Dll.GetForegroundWindow();
+                if (foregroundWindow != windowHandle)
+                    continue;
+                // random delay between 1 and 4 seconds in half second intervals
+                var delay = RandomInstance.Next(2, 9) * 500;
+                var holdMultiple = RandomInstance.Next(0, 2) == 1;
+                if (holdMultiple)
                 {
-                    // random delay between 1 and 4 seconds in half second intervals
-                    var delay = RandomInstance.Next(2, 9) * 500;
-                    var holdMultiple = RandomInstance.Next(0, 2) == 1;
-                    if (holdMultiple)
+                    VirtualKeyCode[] keyCodes = GenerateMultipleRandomKeys(2);
+                    // disallows opposite keys to be pressed so that movement is always ensured
+                    while (keyCodes.Contains(VirtualKeyCode.VK_W) && keyCodes.Contains(VirtualKeyCode.VK_S)
+                           || keyCodes.Contains(VirtualKeyCode.VK_A) && keyCodes.Contains(VirtualKeyCode.VK_D))
                     {
-                        VirtualKeyCode[] keyCodes = GenerateMultipleRandomKeys(2);
-                        // disallows opposite keys to be pressed so that movement is always ensured
-                        while (keyCodes.Contains(VirtualKeyCode.VK_W) && keyCodes.Contains(VirtualKeyCode.VK_S)
-                               || keyCodes.Contains(VirtualKeyCode.VK_A) && keyCodes.Contains(VirtualKeyCode.VK_D))
-                        {
-                            keyCodes = GenerateMultipleRandomKeys(2);
-                        }
+                        keyCodes = GenerateMultipleRandomKeys(2);
+                    }
 
-                        HoldKey(keyCodes, delay);
-                    }
-                    else
-                    {
-                        VirtualKeyCode key = GetRandomMovementKey();
-                        // disallows left shift to be pressed on its own
-                        while (key == VirtualKeyCode.LSHIFT) key = GetRandomMovementKey();
-                        HoldKey(key, delay);
-                    }
+                    HoldKey(keyCodes, delay);
+                }
+                else
+                {
+                    VirtualKeyCode key = GetRandomMovementKey();
+                    // disallows left shift to be pressed on its own
+                    while (key == VirtualKeyCode.LSHIFT) key = GetRandomMovementKey();
+                    HoldKey(key, delay);
                 }
 
                 Console.Write("\rPress Esc to exit...".PadRight(45));
