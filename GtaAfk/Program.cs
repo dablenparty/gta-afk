@@ -24,7 +24,7 @@ public static class Program
     /// </summary>
     /// <param name="keyCodesEnumerable">Keys to hold</param>
     /// <param name="timeoutInMillis">Time (in milliseconds) to hold the keys for</param>
-    private static void HoldKey(IEnumerable<VirtualKeyCode> keyCodesEnumerable, int timeoutInMillis)
+    private static void HoldKeys(IEnumerable<VirtualKeyCode> keyCodesEnumerable, int timeoutInMillis)
     {
         var keyCodesArray = keyCodesEnumerable as VirtualKeyCode[] ?? keyCodesEnumerable.ToArray();
         var tail = timeoutInMillis == 1000 ? "second" : "seconds";
@@ -58,8 +58,7 @@ public static class Program
             if (shouldSprint)
                 keyCodes = keyCodes.Append(VirtualKeyCode.LSHIFT);
 
-            HoldKey(keyCodes, delay);
-
+            HoldKeys(keyCodes, delay);
         }
     }
 
