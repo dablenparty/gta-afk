@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using WindowsInput;
 using WindowsInput.Native;
@@ -37,7 +38,7 @@ namespace GtaAfk
         /// <param name="timeoutInMillis">Time (in milliseconds) to hold the keys for</param>
         private static void HoldKey(IEnumerable<VirtualKeyCode> keyCodesEnumerable, int timeoutInMillis)
         {
-            VirtualKeyCode[] keyCodesArray = keyCodesEnumerable as VirtualKeyCode[] ?? keyCodesEnumerable.ToArray();
+            var keyCodesArray = keyCodesEnumerable as VirtualKeyCode[] ?? keyCodesEnumerable.ToArray();
             var tail = timeoutInMillis == 1000 ? "second" : "seconds";
             Console.Write(
                 $"\rHolding {string.Join(", ", keyCodesArray)} for {Convert.ToDecimal(timeoutInMillis) / 1000} {tail}"
@@ -60,42 +61,53 @@ namespace GtaAfk
                     continue;
                 // random delay between 1 and 4 seconds in half second intervals
                 var delay = RandomInstance.Next(2, 9) * 500;
-                var holdMultiple = RandomInstance.Next(0, 2) == 1;
-                if (holdMultiple)
-                {
-                    VirtualKeyCode[] keyCodes = GenerateMultipleRandomKeys(2);
-                    // disallows opposite keys to be pressed so that movement is always ensured
-                    while (keyCodes.Contains(VirtualKeyCode.VK_W) && keyCodes.Contains(VirtualKeyCode.VK_S)
-                           || keyCodes.Contains(VirtualKeyCode.VK_A) && keyCodes.Contains(VirtualKeyCode.VK_D))
-                    {
-                        keyCodes = GenerateMultipleRandomKeys(2);
-                    }
+                var keyCount = RandomInstance.Next(1, 3);
+                var keyCodes = GenerateMultipleRandomKeys(keyCount);
 
-                    HoldKey(keyCodes, delay);
-                }
-                else
-                {
-                    VirtualKeyCode key = GetRandomMovementKey();
-                    // disallows left shift to be pressed on its own
-                    while (key == VirtualKeyCode.LSHIFT) key = GetRandomMovementKey();
-                    HoldKey(key, delay);
-                }
+                HoldKey(keyCodes, delay);
 
                 Console.Write("\rPress Esc to exit...".PadRight(45));
                 if (Console.KeyAvailable && Console.ReadKey(true).Key == ConsoleKey.Escape) break;
             }
         }
 
-        private static VirtualKeyCode[] GenerateMultipleRandomKeys(int count)
+        private static IEnumerable<VirtualKeyCode> GenerateMultipleRandomKeys(int count)
         {
             var keyCodes = new VirtualKeyCode[count];
-            for (var i = 0; i < keyCodes.Length; i++)
+            var i = 0;
+            while (i < keyCodes.Length)
             {
-                VirtualKeyCode key = GetRandomMovementKey();
+                var key = GetRandomMovementKey();
                 // don't use the same key twice
-                while (keyCodes.Contains(key)) key = GetRandomMovementKey();
+                if (keyCodes.Contains(key))
+                    continue;
+                // disallows duplicate keys that would cancel each other out
+                switch (key)
+                {
+                    case VirtualKeyCode.VK_W:
+                        if (keyCodes.Contains(VirtualKeyCode.VK_S))
+                            continue;
+                        break;
+                    case VirtualKeyCode.VK_S:
+                        if (keyCodes.Contains(VirtualKeyCode.VK_W))
+                            continue;
+                        break;
+                    case VirtualKeyCode.VK_A:
+                        if (keyCodes.Contains(VirtualKeyCode.VK_D))
+                            continue;
+                        break;
+                    case VirtualKeyCode.VK_D:
+                        if (keyCodes.Contains(VirtualKeyCode.VK_A))
+                            continue;
+                        break;
+                    case VirtualKeyCode.LSHIFT:
+                        // left shift is allowed
+                        break;
+                    default:
+                        throw new InvalidDataException($"Invalid key: {key}");
+                }
 
-                keyCodes[i] = key;
+                keyCodes[i++] = key;
             }
 
             return keyCodes;
